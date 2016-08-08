@@ -7,6 +7,10 @@ library(knitr)
 shinyServer(function(input, output, session) {
   output$knitDoc <- renderUI({
     input$eval
-    return(isolate(HTML(knit2html(text = input$rmd, fragment.only = TRUE, quiet = TRUE))))
+    writeLines(input$rmd, "out.Rmd")
+    knit2html(input="out.Rmd", fragment.only = TRUE, quiet = TRUE)
+    return(isolate(HTML(
+      readLines("out.html")
+    )))
   })  
 })
